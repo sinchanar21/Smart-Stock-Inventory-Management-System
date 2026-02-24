@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">    
+    <title>Edit Item - SmartStock</title>
+</head>
+<body>
+    <header class="header">
+        <h1><i class="fas fa-warehouse"></i> SmartStock Inventory</h1>
+        <div class="header-nav">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            {% if session.logged_in %}
+                <a href="/add-item"><i class="fas fa-plus-circle"></i> Add Item</a>
+            {% endif %}
+            <!-- <a href="/stock-chart"><i class="fas fa-chart-bar"></i> Charts</a>
+            <a href="/audit-trail"><i class="fas fa-history"></i> Audit Trail</a> -->
+            {% if session.logged_in %}
+                <div class="user-menu">
+                    <i class="fas fa-user"></i>
+                    <span>{{ session.username }}</span>
+                    <a href="/logout" class="ml-2"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            {% else %}
+                <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Navigation</h3>
+                <button class="toggle-sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="/"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                {% if session.logged_in %}
+                <li><a href="/add-item"><i class="fas fa-plus-circle"></i> <span>Add Item</span></a></li>
+                <li><a href="/sales"><i class="fas fa-shopping-cart"></i> <span>Sales</span></a></li>
+                <li><a href="/stock"><i class="fas fa-boxes"></i> <span>Stock</span></a></li>
+                <li><a href="/transactions"><i class="fas fa-exchange-alt"></i> <span>Transactions</span></a></li>
+                {% endif %}
+                <li><a href="/stock-chart"><i class="fas fa-chart-bar"></i> <span>Charts</span></a></li>
+                <li><a href="/audit-trail"><i class="fas fa-history"></i> <span>Audit Trail</span></a></li>
+                {% if session.logged_in %}
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+                {% else %}
+                <li><a href="/login"><i class="fas fa-sign-in-alt"></i> <span>Login</span></a></li>
+                {% endif %}
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <h2><i class="fas fa-edit"></i> Edit Item</h2>
+            
+            {% if error %}
+                <div class="alert error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div>
+                        <p>{{ error }}</p>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <form method="POST" class="card">
+                <div class="mb-6">
+                    <label for="name"><i class="fas fa-tag"></i> Item Name:</label>
+                    <input type="text" id="name" name="name" value="{{ item[1] }}" required placeholder="Enter item name">
+                </div>
+                
+                <div class="mb-6">
+                    <label for="qty"><i class="fas fa-sort-numeric-up"></i> Quantity:</label>
+                    <input type="number" id="qty" name="qty" value="{{ item[2] }}" min="0" required placeholder="Enter quantity">
+                </div>
+                
+                <div class="mb-8">
+                    <label for="price"><i class="fas fa-rupee-sign"></i> Price (₹):</label>
+                    <input type="number" id="price" name="price" value="{{ item[3] }}" step="0.01" min="0" required placeholder="Enter price">
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save"></i> Update Item
+                </button>
+            </form>
+            
+            <a href="/" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </main>
+    </div>
+</body>
+</html>
